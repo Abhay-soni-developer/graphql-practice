@@ -19,4 +19,13 @@
 - **Manual exercise:** Requestly `hello` sends `{ "query": "{ hello }" }`; expect `{ "data": { "hello": "Hello, GraphQL!" } }`.
 - **Theory:** [My notes — Introduction](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0) → schema contract and execution pipeline; [Object types, schema, and resolution](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts).
 
-Next: add a required greeting argument, then variables and invalid-input examples. Record those concepts after implementation and verification.
+## Stage 3 — Required arguments and variables
+
+- **Arguments:** `hello(name: String!)` reads `args.name` in [schema.ts](./src/graphql/schema.ts); non-null requires a supplied string but still permits an empty string.
+- **Variables:** a named operation declares `$name: String!`; the JSON `variables` object supplies its value separately.
+- **Validation:** missing `name` and numeric input are rejected before the greeting resolver runs.
+- **Manual examples:** Requestly `helloWithName` and `welcome-Variables` succeed; `graphql - missing arguments` and `graphql - wrong type` intentionally fail validation. The earlier `hello` request was renamed for the new required argument.
+- **Verification:** type-checking passed, and direct execution of all four saved operations produced the expected data/errors. A new HTTP smoke check was not run for this stage.
+- **Theory:** [My notes — Arguments vs. Variables](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.sl5vmcf3ax20).
+
+Next: compare explicit resolution with default resolution through `rootValue`.

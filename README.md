@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: basic GraphQL HTTP integration.** The API exposes a health endpoint and a fixed-response `hello` query. Further concepts are added in later stages.
+**Current stage: required arguments and variables.** The API exposes a health endpoint and `hello(name: String!): String!`. Further concepts are added in later stages.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -44,16 +44,16 @@ Configuration loads `.env.<NODE_ENV>`, defaulting to development. Existing proce
 - **GraphQL:** `POST http://localhost:3000/graphql` with `Content-Type: application/json`:
 
 ```json
-{ "query": "{ hello }" }
+{ "query": "query Greeting($name: String!) { hello(name: $name) }", "variables": { "name": "Abhay" } }
 ```
 
 Expected response:
 
 ```json
-{ "data": { "hello": "Hello, GraphQL!" } }
+{ "data": { "hello": "Hello, Abhay! from explicit resolver" } }
 ```
 
-Change the port in your requests if needed. Open the local `api-requests/` project in Requestly and use the `health` and `hello` requests.
+Change the port in your requests if needed. Open the local `api-requests/` project in Requestly and use `health`, `helloWithName`, and `welcome-Variables`. The missing-argument and wrong-type examples intentionally return GraphQL errors.
 
 ## Libraries
 

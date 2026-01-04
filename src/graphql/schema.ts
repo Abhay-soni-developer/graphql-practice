@@ -11,10 +11,17 @@ const RootQueryType = new GraphQLObjectType({
   fields: {
     hello: {
       type: new GraphQLNonNull(GraphQLString),
-      // explicit resolver , graphql engine first choice
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      // explicit resolver , graphql engineer first choice
       // rootValue becomes parent in case it is provided
       resolve: (rootValue, args, _context, _info) => {
-        return "Hello, GraphQL!";
+        const { name } = args;
+        // explicit resolver can call rootValue if provided
+        // console.log("from rootValue :: ", rootValue.hello(args));
+        console.log(`Received query with name: ${name}`);
+        return `Hello, ${name}! from explicit resolver`;
       },
     },
   },
