@@ -24,6 +24,9 @@ const RootQueryType = new GraphQLObjectType({
         return `Hello, ${name}! from explicit resolver`;
       },
     },
+    version: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
 });
 

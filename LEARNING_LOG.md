@@ -28,4 +28,14 @@
 - **Verification:** type-checking passed, and direct execution of all four saved operations produced the expected data/errors. A new HTTP smoke check was not run for this stage.
 - **Theory:** [My notes — Arguments vs. Variables](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.sl5vmcf3ax20).
 
-Next: compare explicit resolution with default resolution through `rootValue`.
+## Stage 4 — Default versus explicit root resolution
+
+- **Root value:** [root-value.ts](./src/graphql/root-value.ts) supplies `version: "1.0.0"`; [routes/index.ts](./src/routes/index.ts) passes it to the GraphQL handler.
+- **Default resolution:** `version` has no explicit resolver in [schema.ts](./src/graphql/schema.ts), so GraphQL reads `rootValue.version`.
+- **Explicit resolution:** `hello` uses its field resolver; the alternate `rootValue.hello` function is bypassed unless explicitly called or the field resolver is removed.
+- **Types:** [types.ts](./src/utils/types/types.ts) defines `HelloQueryParam`; `GraphQLResolveInfo` describes execution metadata, and `typeof rootValue` derives the root object's TypeScript type.
+- **Manual example:** Requestly `getVersion` returns `version: "1.0.0"`. Selecting `hello(name: "Abhay")` alongside `version` demonstrates both resolution paths.
+- **Verification:** isolated stage 4 type-checking and compilation passed; the saved version operation and explicit-resolver precedence passed direct execution. Later-stage untracked files currently have missing user-type imports and are excluded from this snapshot.
+- **Theory:** [My notes — Object types, schema, and default/explicit resolution](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts).
+
+Next: user objects and nested resolver parent values.
