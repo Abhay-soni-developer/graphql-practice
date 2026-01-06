@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: required arguments and variables.** The API exposes a health endpoint and `hello(name: String!): String!`. Further concepts are added in later stages.
+**Current stage: user objects and nested resolvers.** The API exposes health, `hello(name:)`, `version`, and `user(id:)` with a computed greeting. User data is seeded in memory; lists and mutations come later.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -55,6 +55,14 @@ Expected response:
 
 Change the port in your requests if needed. Open the local `api-requests/` project in Requestly and use `health`, `helloWithName`, and `welcome-Variables`. The missing-argument and wrong-type examples intentionally return GraphQL errors.
 
+Fetch a user with the `getUser` or `getUser-Variable` Requestly request:
+
+```json
+{ "query": "query GetUser($id: ID!) { user(id: $id) { id name email greeting } }", "variables": { "id": "1" } }
+```
+
+The user resolver returns the parent object; ordinary fields read its properties and the explicit `greeting` resolver computes `"Welcome ! Abhay Soni"`. The `getVersion` request demonstrates default root resolution.
+
 ## Libraries
 
 | Library | Purpose |
@@ -82,8 +90,17 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   ├── routes/
 │   │   ├── index.ts             # Mount /health and /graphql
 │   │   └── health.ts            # Health response handler
-│   └── graphql/
-│       └── schema.ts            # Query object, hello resolver, and GraphQLSchema
+│   ├── graphql/
+│   │   ├── schema.ts            # Compose root Query and feature fields
+│   │   └── root-value.ts        # Root values and alternate hello example
+│   ├── modules/user/
+│   │   ├── user.schema.ts       # User object type and lookup field
+│   │   ├── user.resolver.ts     # Lookup delegation and computed greeting
+│   │   └── user.service.ts      # Lookup and missing-user behavior
+│   └── utils/
+│       ├── index.ts             # Shared type and data exports
+│       ├── data.ts              # Seed records and in-memory user Map
+│       └── types/types.ts       # Greeting arguments and user domain types
 ├── api-requests/
 │   ├── __requestly.json         # Requestly local-project configuration
 │   ├── apis/                   # Collections and saved requests

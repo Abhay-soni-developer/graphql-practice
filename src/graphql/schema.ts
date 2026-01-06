@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
 } from "graphql";
+import { userQueries } from "../modules/user/user.schema.js";
 
 // Here, we're constructing GraphQL types through JavaScript objects.
 const RootQueryType = new GraphQLObjectType({
@@ -24,6 +25,8 @@ const RootQueryType = new GraphQLObjectType({
         return `Hello, ${name}! from explicit resolver`;
       },
     },
+    // User Operations
+    ...userQueries,
     version: {
       type: new GraphQLNonNull(GraphQLString),
     },

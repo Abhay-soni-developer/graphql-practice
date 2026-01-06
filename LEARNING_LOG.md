@@ -38,4 +38,14 @@
 - **Verification:** isolated stage 4 type-checking and compilation passed; the saved version operation and explicit-resolver precedence passed direct execution. Later-stage untracked files currently have missing user-type imports and are excluded from this snapshot.
 - **Theory:** [My notes — Object types, schema, and default/explicit resolution](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts).
 
-Next: user objects and nested resolver parent values.
+## Stage 5 — User objects and nested resolver parent values
+
+- **Object contract:** [user.schema.ts](./src/modules/user/user.schema.ts) defines `User` and nullable `user(id: ID!): User`; [schema.ts](./src/graphql/schema.ts) composes the feature query.
+- **Lookup:** [user.resolver.ts](./src/modules/user/user.resolver.ts) delegates to [user.service.ts](./src/modules/user/user.service.ts), which reads the seeded Map in [data.ts](./src/utils/data.ts).
+- **Parent values:** the returned user becomes the source for its fields. Default resolution reads `id`, `name`, and `email`; the explicit `greeting` resolver computes a string from `parent.name`.
+- **Selection:** the greeting resolver runs only when `greeting` is requested. Resolver logs make this visible.
+- **Examples:** Requestly `getUser` selects the greeting; `getUser-Variable` demonstrates an ID variable and ordinary fields.
+- **Verification:** type-checking, isolated compilation, saved query execution, lookup success/failure, and greeting selection checks passed. No new HTTP smoke check or persistent automated test suite was added.
+- **Theory:** [My notes — Root and field-level resolvers](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.f2sw8qc1hp1z).
+
+Next: user lists, nullable values, and missing-user errors.
