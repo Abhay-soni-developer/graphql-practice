@@ -1,0 +1,4 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "query GetUsers {\n  # resource aliases\n  firstUser: user(id: \"1\") {\n    name\n  }\n\n  secondUser: user(id: \"2\") {\n    # field aliases\n    secretName: name\n    # can use this to fetch same field \n    # different arguments\n    secretName1: name\n  }\n}"
+}

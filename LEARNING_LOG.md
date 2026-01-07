@@ -48,4 +48,15 @@
 - **Verification:** type-checking, isolated compilation, saved query execution, lookup success/failure, and greeting selection checks passed. No new HTTP smoke check or persistent automated test suite was added.
 - **Theory:** [My notes — Root and field-level resolvers](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.f2sw8qc1hp1z).
 
-Next: user lists, nullable values, and missing-user errors.
+## Stage 6 — Lists, nullability, and query composition
+
+- **Lists:** [user.schema.ts](./src/modules/user/user.schema.ts) defines `[User!]!`, and [user.service.ts](./src/modules/user/user.service.ts) returns an array; an empty array is valid ([notes: Introduction/nullability](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0)).
+- **Nullable values and partial errors:** nullable `email` can be null without errors; a missing nullable `user` returns null plus an error while `version` survives ([resolver](./src/modules/user/user.resolver.ts), [notes: Null propagation](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.xq00qkv71pyy)).
+- **List request:** [getUsersList](<./api-requests/apis/Graphql Practice/getUsersList/__body.json>) selects user IDs/names alongside the API version.
+- **Variables:** [graphql-fragments-variables](<./api-requests/apis/Graphql Practice/graphql-fragments-variables/__query.json>) supplies `$id` separately from the reusable query document ([notes: Variables](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.sl5vmcf3ax20)).
+- **Aliases:** [graphql-alias](<./api-requests/apis/Graphql Practice/graphql-alias/__query.json>) and [HTTP alias example](<./api-requests/apis/Graphql Practice/graphql-http-alias-request/__body.json>) rename response fields and fetch users with different arguments without changing the schema ([notes: Aliases](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.5808gl3cjns2)).
+- **Named fragments:** [graphql-fragments-variables](<./api-requests/apis/Graphql Practice/graphql-fragments-variables/__query.json>) reuses the `UserSelectedFields` selection on `User` ([notes: Fragments](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.nf8gykt6rmzn)).
+- **Inline fragments:** [graphql-inline-fragments](<./api-requests/apis/Graphql Practice/graphql-inline-fragments/__query.json>) applies an unnamed `... on User` type-conditioned selection ([notes: Fragments](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.nf8gykt6rmzn)).
+- **Verification:** type-checking, isolated compilation, all five saved operations, nullable email, partial errors, and empty-list behavior passed; checks used direct execution, not a new HTTP smoke check.
+
+Next: user creation mutations; alias and fragment examples are already included in this stage.

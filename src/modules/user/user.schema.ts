@@ -5,7 +5,11 @@ import {
   GraphQLID,
   GraphQLList,
 } from "graphql";
-import { resolveUser, resolveUserGreeting } from "./user.resolver.js";
+import {
+  resolveUser,
+  resolveUserGreeting,
+  resolveUsers,
+} from "./user.resolver.js";
 
 export const UserType = new GraphQLObjectType({
   name: "User", // object name, useful for referencing
@@ -32,5 +36,10 @@ export const userQueries = {
     args: { id: { type: new GraphQLNonNull(GraphQLID) } },
     // ROOT LEVEL RESOLVER
     resolve: resolveUser,
+  },
+
+  users: {
+    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserType))),
+    resolve: resolveUsers,
   },
 };

@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: user objects and nested resolvers.** The API exposes health, `hello(name:)`, `version`, and `user(id:)` with a computed greeting. User data is seeded in memory; lists and mutations come later.
+**Current stage: user lists, nullability, and query composition.** The API exposes health, `hello(name:)`, `version`, `user(id:)`, and `users`. Saved examples cover variables, aliases, and fragments. User data is seeded in memory; mutations come later.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -61,7 +61,7 @@ Fetch a user with the `getUser` or `getUser-Variable` Requestly request:
 { "query": "query GetUser($id: ID!) { user(id: $id) { id name email greeting } }", "variables": { "id": "1" } }
 ```
 
-The user resolver returns the parent object; ordinary fields read its properties and the explicit `greeting` resolver computes `"Welcome ! Abhay Soni"`. The `getVersion` request demonstrates default root resolution.
+The user resolver returns the parent object; ordinary fields read its properties and the explicit `greeting` resolver computes `"Welcome ! Abhay Soni"`. The `getVersion` request demonstrates default root resolution. Use `getUsersList` for the list and the saved alias/fragment requests for query composition.
 
 ## Libraries
 
