@@ -6,6 +6,7 @@ import {
   GraphQLList,
 } from "graphql";
 import {
+  resolveCreateUser,
   resolveUser,
   resolveUserGreeting,
   resolveUsers,
@@ -41,5 +42,16 @@ export const userQueries = {
   users: {
     type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserType))),
     resolve: resolveUsers,
+  },
+};
+
+export const userMutations = {
+  createUser: {
+    type: UserType,
+    args: {
+      name: { type: new GraphQLNonNull(GraphQLString) },
+      email: { type: GraphQLString },
+    },
+    resolve: resolveCreateUser,
   },
 };

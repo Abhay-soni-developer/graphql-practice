@@ -59,4 +59,14 @@
 - **Inline fragments:** [graphql-inline-fragments](<./api-requests/apis/Graphql Practice/graphql-inline-fragments/__query.json>) applies an unnamed `... on User` type-conditioned selection ([notes: Fragments](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.nf8gykt6rmzn)).
 - **Verification:** type-checking, isolated compilation, all five saved operations, nullable email, partial errors, and empty-list behavior passed; checks used direct execution, not a new HTTP smoke check.
 
-Next: user creation mutations; alias and fragment examples are already included in this stage.
+## Stage 7 — User creation mutations and feature types
+
+- **Mutation root:** [schema.ts](./src/graphql/schema.ts) registers `Mutation`; [user.schema.ts](./src/modules/user/user.schema.ts) exports `createUser(name: String!, email: String): User`.
+- **State change:** [user.resolver.ts](./src/modules/user/user.resolver.ts) delegates creation to [user.service.ts](./src/modules/user/user.service.ts), which generates an ID, stores the user, and returns it.
+- **Response selection:** [createUser-Mutation](<./api-requests/apis/Graphql Practice/createUser-Mutation/__query.json>) selects the new user's ID, name, email, and computed greeting.
+- **Optional input:** omitted or null email becomes null; missing name is rejected by GraphQL, while blank-name/email-format validation remains future work.
+- **Feature types:** [user.type.ts](./src/modules/user/user.type.ts) owns `User`, `UserRecords`, and `CreateUserRequest`; the latter marks email optional to match GraphQL arguments.
+- **Verification:** isolated type-check/build, saved mutation, generated IDs, lookup/list after creation, omitted/null email, and missing-name checks passed through direct execution; no new HTTP smoke check or persistent test suite was added.
+- **Theory:** [My notes — Mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).
+
+Data is in memory and disappears on restart; mutations do not automatically provide database persistence, transactions, or business validation.

@@ -1,0 +1,4 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "mutation CreateUser {\n  createUser(name: \"Abhay Soni\", email: \"abhaysoni.developer@gmail.com\") {\n    id name email greeting\n  }\n}"
+}

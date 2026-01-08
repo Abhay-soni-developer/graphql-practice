@@ -1,4 +1,4 @@
-import type { UserRecords } from "./types/types.js";
+import type { UserRecords } from "./index.js";
 
 export const USERS: UserRecords = {
   "1": { id: "1", name: "Abhay Soni", email: "abhaysoni.developer@gmail.com" },

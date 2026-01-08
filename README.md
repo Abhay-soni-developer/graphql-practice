@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: user lists, nullability, and query composition.** The API exposes health, `hello(name:)`, `version`, `user(id:)`, and `users`. Saved examples cover variables, aliases, and fragments. User data is seeded in memory; mutations come later.
+**Current stage: user creation mutations.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -63,6 +63,21 @@ Fetch a user with the `getUser` or `getUser-Variable` Requestly request:
 
 The user resolver returns the parent object; ordinary fields read its properties and the explicit `greeting` resolver computes `"Welcome ! Abhay Soni"`. The `getVersion` request demonstrates default root resolution. Use `getUsersList` for the list and the saved alias/fragment requests for query composition.
 
+Create a user with the `createUser-Mutation` Requestly example:
+
+```graphql
+mutation CreateUser {
+  createUser(name: "Practice User", email: "practice@example.com") {
+    id
+    name
+    email
+    greeting
+  }
+}
+```
+
+The response contains a generated ID; use it in a lookup or fetch `users` to see the stored record. Email may be omitted or null; name is required. GraphQL string validation does not reject blank names or validate email format.
+
 ## Libraries
 
 | Library | Purpose |
@@ -91,16 +106,17 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   │   ├── index.ts             # Mount /health and /graphql
 │   │   └── health.ts            # Health response handler
 │   ├── graphql/
-│   │   ├── schema.ts            # Compose root Query and feature fields
+│   │   ├── schema.ts            # Compose Query/Mutation roots and feature fields
 │   │   └── root-value.ts        # Root values and alternate hello example
 │   ├── modules/user/
-│   │   ├── user.schema.ts       # User object type and lookup field
-│   │   ├── user.resolver.ts     # Lookup delegation and computed greeting
-│   │   └── user.service.ts      # Lookup and missing-user behavior
+│   │   ├── user.schema.ts       # User type, queries, and creation mutation
+│   │   ├── user.resolver.ts     # Query/mutation delegation and computed greeting
+│   │   ├── user.service.ts      # User lookup, listing, and creation
+│   │   └── user.type.ts         # User, records, and mutation argument types
 │   └── utils/
 │       ├── index.ts             # Shared type and data exports
 │       ├── data.ts              # Seed records and in-memory user Map
-│       └── types/types.ts       # Greeting arguments and user domain types
+│       └── types/types.ts       # Greeting argument type; user types live in their module
 ├── api-requests/
 │   ├── __requestly.json         # Requestly local-project configuration
 │   ├── apis/                   # Collections and saved requests

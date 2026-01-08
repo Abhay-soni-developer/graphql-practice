@@ -4,7 +4,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
 } from "graphql";
-import { userQueries } from "../modules/user/user.schema.js";
+import { userMutations, userQueries } from "../modules/user/user.schema.js";
 
 // Here, we're constructing GraphQL types through JavaScript objects.
 const RootQueryType = new GraphQLObjectType({
@@ -32,10 +32,17 @@ const RootQueryType = new GraphQLObjectType({
     },
   },
 });
+const RootMutationType = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    ...userMutations,
+  },
+});
 
 const schema = new GraphQLSchema({
   // this is the root query, which anchors all entry-point query fields.
   query: RootQueryType,
+  mutation: RootMutationType,
 });
 
 export default schema;
