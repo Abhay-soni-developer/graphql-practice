@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: user creation mutations.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts.
+**Current stage: GraphQL WebSocket transport setup.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; message subscriptions and shutdown wiring belong to subsequent commits.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -85,12 +85,14 @@ The response contains a generated ID; use it in a lookup or fetch `users` to see
 | `graphql` | Define types/schema, parse and validate operations, execute resolvers |
 | `graphql-http` | Connect GraphQL execution to HTTP using its Express handler |
 | `express` | HTTP application, middleware, and routing |
+| `ws` | WebSocket connections attached to the shared HTTP server |
+| `graphql-ws` | GraphQL protocol and execution over WebSocket |
 | `dotenv` | Load environment-file settings |
 | `zod` | Validate runtime configuration |
 | `typescript` | Type-check and compile source |
 | `tsx` | Execute TypeScript and watch for changes during development |
 | `cross-env` | Set environment variables consistently across operating systems |
-| `@types/node`, `@types/express` | TypeScript declarations for Node.js and Express |
+| `@types/node`, `@types/express`, `@types/ws` | TypeScript declarations for Node.js, Express, and WebSocket connections |
 
 ## Folder architecture
 
@@ -99,7 +101,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 ```text
 .
 ├── src/
-│   ├── index.ts                 # Start listening and handle server errors
+│   ├── index.ts                 # Share HTTP/WebSocket server, start listening, handle errors
 │   ├── app.ts                   # Assemble Express middleware and routes
 │   ├── config.ts                # Load and validate environment settings
 │   ├── routes/

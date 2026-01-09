@@ -70,3 +70,23 @@
 - **Theory:** [My notes — Mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).
 
 Data is in memory and disappears on restart; mutations do not automatically provide database persistence, transactions, or business validation.
+
+## Stage 8 — Shared HTTP/WebSocket transport
+
+- **Shared server:** [index.ts](./src/index.ts) uses `createServer(app)` so HTTP requests and WebSocket upgrades share one port and `/graphql` path.
+- **Libraries:** `ws` manages connections; `graphql-ws` supplies the GraphQL WebSocket protocol and executes the existing schema.
+- **Root values:** `roots` supplies the existing root data for operations executed over WebSocket.
+- **Scope:** transport is enabled first; message subscriptions and graceful shutdown are separate subsequent commits.
+- **Verification:** the transport-only snapshot passed type-checking and compilation; HTTP health/query and a GraphQL WebSocket query worked on the same port and `/graphql` path.
+- **Theory:** [My notes — Subscriptions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.eyqdtl292mjb).
+
+### Planned reconstructed author dates
+
+| Stage | Commit scope | Author date |
+| --- | --- | --- |
+| 8 | WebSocket transport setup | January 9, 2026 |
+| 9 | Shutdown handler and signal wiring | January 10, 2026 |
+| 10 | Message subscription implementation | January 11, 2026 |
+| 11 | Subscription testing | January 12, 2026 |
+
+Each upcoming stage will receive its own short entry when verified. These are reconstructed author dates; actual committer dates are retained.
