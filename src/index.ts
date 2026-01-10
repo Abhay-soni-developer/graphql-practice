@@ -7,6 +7,8 @@ import { config } from "./config.js";
 import rootValue from "./graphql/root-value.js";
 import schema from "./graphql/schema.js";
 
+import createShutdownHandler from "./shutdownHandler.js";
+
 const app = createApp();
 const server = createServer(app);
 
@@ -34,4 +36,14 @@ server.listen(config.port, () => {
 server.on("error", (error: Error) => {
   console.error("Failed to start server:", error);
   process.exitCode = 1;
+});
+
+const shutdown = createShutdownHandler(server, subscriptionServer);
+
+process.once("SIGINT", () => {
+  void shutdown();
+});
+
+process.once("SIGTERM", () => {
+  void shutdown();
 });

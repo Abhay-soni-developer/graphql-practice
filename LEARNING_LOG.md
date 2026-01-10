@@ -90,3 +90,10 @@ Data is in memory and disappears on restart; mutations do not automatically prov
 | 11 | Subscription testing | January 12, 2026 |
 
 Each upcoming stage will receive its own short entry when verified. These are reconstructed author dates; actual committer dates are retained.
+
+## Stage 9 — Graceful shutdown
+
+- **Lifecycle:** [index.ts](./src/index.ts) handles `SIGINT` and `SIGTERM` through [shutdownHandler.ts](./src/shutdownHandler.ts).
+- **Cleanup:** HTTP stops accepting new connections while `subscriptionServer.dispose()` closes WebSocket resources.
+- **Guard and deadline:** repeated calls are ignored; a 10-second timer prevents a normally pending shutdown from waiting indefinitely.
+- **Verification:** the isolated stage passed type-check/build; both signals closed an active WebSocket and exited with code 0. Failure-path and forced-timeout behavior were not exercised.

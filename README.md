@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: GraphQL WebSocket transport setup.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; message subscriptions and shutdown wiring belong to subsequent commits.
+**Current stage: graceful HTTP/WebSocket shutdown.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. Message subscriptions belong to a subsequent commit.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -104,6 +104,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   ├── index.ts                 # Share HTTP/WebSocket server, start listening, handle errors
 │   ├── app.ts                   # Assemble Express middleware and routes
 │   ├── config.ts                # Load and validate environment settings
+│   ├── shutdownHandler.ts       # Close HTTP/WebSocket resources on termination
 │   ├── routes/
 │   │   ├── index.ts             # Mount /health and /graphql
 │   │   └── health.ts            # Health response handler
