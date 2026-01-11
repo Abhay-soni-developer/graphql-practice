@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: graceful HTTP/WebSocket shutdown.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. Message subscriptions belong to a subsequent commit.
+**Current stage: channel-based message subscriptions.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `createMessage(text:, from:, to:)` publishes to the recipient channel; `sendMessage(consumerId:)` streams future events to its active subscribers. The following stage adds saved examples and repeatable subscription tests.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -116,6 +116,11 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   │   ├── user.resolver.ts     # Query/mutation delegation and computed greeting
 │   │   ├── user.service.ts      # User lookup, listing, and creation
 │   │   └── user.type.ts         # User, records, and mutation argument types
+│   ├── modules/message/
+│   │   ├── message.schema.ts    # Message type, creation mutation, subscription field
+│   │   ├── message.resolver.ts  # Delegate message creation to the service
+│   │   ├── message.service.ts   # Emit events and manage per-subscriber queues
+│   │   └── message.type.ts      # Message and channel argument types
 │   └── utils/
 │       ├── index.ts             # Shared type and data exports
 │       ├── data.ts              # Seed records and in-memory user Map

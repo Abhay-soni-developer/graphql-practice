@@ -97,3 +97,14 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Cleanup:** HTTP stops accepting new connections while `subscriptionServer.dispose()` closes WebSocket resources.
 - **Guard and deadline:** repeated calls are ignored; a 10-second timer prevents a normally pending shutdown from waiting indefinitely.
 - **Verification:** the isolated stage passed type-check/build; both signals closed an active WebSocket and exited with code 0. Failure-path and forced-timeout behavior were not exercised.
+
+## Stage 10 — Channel-based message subscriptions
+
+- **Schema:** [message.schema.ts](./src/modules/message/message.schema.ts) defines `createMessage` and `sendMessage(consumerId:)`; [schema.ts](./src/graphql/schema.ts) registers the subscription root.
+- **Publishing:** [message.service.ts](./src/modules/message/message.service.ts) emits each created message on its `to` channel; [message.resolver.ts](./src/modules/message/message.resolver.ts) delegates creation.
+- **Stream:** each subscription owns its message queue and pending `next()` callbacks; `[Symbol.asyncIterator]` returns the stream itself.
+- **Resolution:** `subscribe` selects the channel stream, while the field's inline `resolve` returns each emitted message for normal GraphQL selection.
+- **Cancellation:** iterator `return()` removes its listener, discards queued messages, and completes pending promises without closing other subscribers.
+- **Verification:** isolated type-check/build and direct execution passed mutation delivery, channel isolation, two subscribers, queue order, cancellation, and missing-argument rejection; network subscription testing is the next stage.
+- **Scope:** in-process future events only; queues are unbounded and caller-supplied channel/sender IDs are not authenticated.
+- **Theory:** [My notes — Subscriptions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.eyqdtl292mjb).
