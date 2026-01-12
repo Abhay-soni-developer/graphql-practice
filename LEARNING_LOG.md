@@ -108,3 +108,12 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Verification:** isolated type-check/build and direct execution passed mutation delivery, channel isolation, two subscribers, queue order, cancellation, and missing-argument rejection; network subscription testing is the next stage.
 - **Scope:** in-process future events only; queues are unbounded and caller-supplied channel/sender IDs are not authenticated.
 - **Theory:** [My notes — Subscriptions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.eyqdtl292mjb).
+
+## Stage 11 — Subscription testing and clearer API names
+
+- **Names:** [message.schema.ts](./src/modules/message/message.schema.ts) exposes mutation `sendMessage` and subscription `subscribeChannel`; `SendMessageRequest` matches the operation name.
+- **Service flow:** [message.service.ts](./src/modules/message/message.service.ts) separates message construction (`createMessage`) from synchronous event publishing (`sendMessage`).
+- **Saved examples:** [HTTP publishing](<./api-requests/apis/Graphql Practice/sendMessage/__query.json>) and [channel subscription](<./api-requests/apis/Graphql Practice/subscribeToConsumerChannel/__query.json>) use matching `to`/`consumerId` values.
+- **Transport:** use `http://localhost:3000/graphql` to publish and `ws://localhost:3000/graphql` to subscribe, with WebSocket subprotocol `graphql-transport-ws` ([browser testing guide](./api-requests/SUBSCRIPTIONS.md)).
+- **Verification:** isolated type-check/build and live HTTP-to-WebSocket checks passed two-subscriber delivery, channel isolation, cancellation, invalid arguments, and shutdown with active subscriptions; the user also confirmed manual delivery. Automated checks ran in a temporary harness; no persistent automated suite was added.
+- **Theory:** [My notes — Subscriptions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.eyqdtl292mjb).

@@ -6,7 +6,7 @@ export type Message = {
   to: string;
 };
 
-export type CreateMessageRequest = {
+export type SendMessageRequest = {
   text: string;
   from: string;
   to: string;

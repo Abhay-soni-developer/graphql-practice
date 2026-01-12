@@ -1,13 +1,13 @@
 import EventEmitter from "node:events";
-import type { CreateMessageRequest, Message } from "./message.type.js";
+import type { SendMessageRequest, Message } from "./message.type.js";
 
 const eventEmitter = new EventEmitter();
 
-export async function createMessage({
-  text,
-  from,
-  to,
-}: CreateMessageRequest): Promise<Message> {
+export function sendMessage(message: Message): Message {
+  eventEmitter.emit(message.to, message);
+  return message;
+}
+export function createMessage({ text, from, to }: SendMessageRequest): Message {
   const message = {
     id: crypto.randomUUID(),
     text,
@@ -16,7 +16,6 @@ export async function createMessage({
     timestamp: Date.now().toString(),
   };
 
-  eventEmitter.emit(to, message);
   return message;
 }
 

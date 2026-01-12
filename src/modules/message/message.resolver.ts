@@ -1,9 +1,11 @@
-import { createMessage } from "./message.service.js";
-import type { CreateMessageRequest, Message } from "./message.type.js";
+import { createMessage, sendMessage } from "./message.service.js";
+import type { SendMessageRequest, Message } from "./message.type.js";
 
-export async function resolveCreateMessage(
+export async function resolveSendMessage(
   _: unknown,
-  args: CreateMessageRequest,
+  args: SendMessageRequest,
 ): Promise<Message> {
-  return createMessage(args);
+  const message = createMessage(args);
+  sendMessage(message);
+  return message;
 }

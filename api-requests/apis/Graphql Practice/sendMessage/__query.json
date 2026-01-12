@@ -1,0 +1,5 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "mutation PostMessage($from: ID!, $to: ID!, $text: String! ) {\n  sendMessage(text: $text, from: $from, to: $to) {\n    id timestamp\n  }\n} ",
+  "variables": "{\n  \"from\": \"1\",\n  \"to\": \"11\",\n  \"text\": \"Hello ! World Abhay\"\n}"
+}

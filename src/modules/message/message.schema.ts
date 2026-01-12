@@ -4,7 +4,7 @@ import {
   GraphQLNonNull,
   GraphQLID,
 } from "graphql";
-import { resolveCreateMessage } from "./message.resolver.js";
+import { resolveSendMessage } from "./message.resolver.js";
 import { subscribeToAConsumerChannel } from "./message.service.js";
 import type { Message, SubscribeChannelRequest } from "./message.type.js";
 
@@ -20,24 +20,27 @@ export const MessageType = new GraphQLObjectType({
 });
 
 export const messageMutations = {
-  createMessage: {
+  sendMessage: {
     type: MessageType,
     args: {
       text: { type: new GraphQLNonNull(GraphQLString) },
       from: { type: new GraphQLNonNull(GraphQLID) },
       to: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: resolveCreateMessage,
+    resolve: resolveSendMessage,
   },
 };
 
 export const messageSubscriptions = {
-  sendMessage: {
+  subscribeChannel: {
     type: MessageType,
     args: {
       consumerId: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: (message: Message) => message,
+    resolve: (message: Message) => {
+      console.log(`message send by ${message.from} to ${message.to}`);
+      return message;
+    },
     subscribe: (_rootValue: unknown, args: SubscribeChannelRequest) =>
       subscribeToAConsumerChannel(args.consumerId),
   },

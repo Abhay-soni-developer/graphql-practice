@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: channel-based message subscriptions.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `createMessage(text:, from:, to:)` publishes to the recipient channel; `sendMessage(consumerId:)` streams future events to its active subscribers. The following stage adds saved examples and repeatable subscription tests.
+**Current stage: verified message publishing and subscriptions.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -78,6 +78,8 @@ mutation CreateUser {
 
 The response contains a generated ID; use it in a lookup or fetch `users` to see the stored record. Email may be omitted or null; name is required. GraphQL string validation does not reject blank names or validate email format.
 
+For manual message-stream testing, use the saved `sendMessage` mutation and follow the [browser subscription guide](./api-requests/SUBSCRIPTIONS.md). The saved `subscribeToConsumerChannel` operation is a reference for a WebSocket-capable client; an ordinary HTTP request does not start this stream.
+
 ## Libraries
 
 | Library | Purpose |
@@ -128,6 +130,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 ├── api-requests/
 │   ├── __requestly.json         # Requestly local-project configuration
 │   ├── apis/                   # Collections and saved requests
+│   ├── SUBSCRIPTIONS.md        # Browser/WebSocket manual testing steps
 │   ├── environments/           # API-client variables, separate from server .env
 │   ├── AGENTS.md               # Requestly-generated file-format instructions
 │   ├── PROJECT.md              # Requestly project context
