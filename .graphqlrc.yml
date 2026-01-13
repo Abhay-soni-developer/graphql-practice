@@ -1,0 +1,21 @@
+projects:
+  main:
+    schema: "http://localhost:3000/graphql"
+    documents:
+      - "./src/graphql/**/*.{ts,graphql,gql}"
+      - "./src/modules/user/**/*.{ts,graphql,gql}"
+      - "./src/modules/message/**/*.{ts,graphql,gql}"
+
+  posts:
+    schema: "http://localhost:3000/post-gql"
+    documents:
+      - "./src/modules/post/**/*.{ts,graphql,gql}"
+
+# main loads the user/message schema.
+# posts loads the post schema.
+
+# Avoid this for your setup:
+# schema:
+#   - "http://localhost:3000/graphql"
+#   - "http://localhost:3000/post-gql"
+# That treats the URLs as sources for one combined schema,

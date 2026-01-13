@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: verified message publishing and subscriptions.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
+**Current stage: SDL-based post endpoint foundation.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -80,6 +80,16 @@ The response contains a generated ID; use it in a lookup or fetch `users` to see
 
 For manual message-stream testing, use the saved `sendMessage` mutation and follow the [browser subscription guide](./api-requests/SUBSCRIPTIONS.md). The saved `subscribeToConsumerChannel` operation is a reference for a WebSocket-capable client; an ordinary HTTP request does not start this stream.
 
+### SDL endpoint
+
+`POST http://localhost:3000/post-gql` exposes a separate schema constructed with `buildSchema` from SDL. Its root value is intentionally empty in this stage: schema inspection works, but post CRUD resolvers are not wired yet.
+
+```json
+{ "query": "{ __typename }" }
+```
+
+Expected: `{ "data": { "__typename": "Query" } }`. The existing `/graphql` API remains available. `.graphqlrc.yml` points editor tooling to the two schemas independently; it does not configure server routes.
+
 ## Libraries
 
 | Library | Purpose |
@@ -118,6 +128,10 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   │   ├── user.resolver.ts     # Query/mutation delegation and computed greeting
 │   │   ├── user.service.ts      # User lookup, listing, and creation
 │   │   └── user.type.ts         # User, records, and mutation argument types
+│   ├── modules/post/
+│   │   ├── index.ts             # Export the post schema and root value
+│   │   ├── post.schema.ts       # Embedded SDL: Post, inputs, interface, operation roots
+│   │   └── post.rootValue.ts    # Empty root object; CRUD wiring comes next
 │   ├── modules/message/
 │   │   ├── message.schema.ts    # Message type, creation mutation, subscription field
 │   │   ├── message.resolver.ts  # Delegate message creation to the service
@@ -138,6 +152,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   └── README.md               # API-client setup and usage guide
 ├── package.json                # Dependencies and scripts
 ├── package-lock.json           # Exact dependency resolutions
+├── .graphqlrc.yml              # Editor schema/project configuration
 ├── tsconfig.json               # Strict TypeScript, ESM/NodeNext, src → dist
 ├── .env.example                # Public configuration keys; fill values locally
 ├── .gitignore                  # Exclude local environment, dependencies, output

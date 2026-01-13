@@ -117,3 +117,15 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Transport:** use `http://localhost:3000/graphql` to publish and `ws://localhost:3000/graphql` to subscribe, with WebSocket subprotocol `graphql-transport-ws` ([browser testing guide](./api-requests/SUBSCRIPTIONS.md)).
 - **Verification:** isolated type-check/build and live HTTP-to-WebSocket checks passed two-subscriber delivery, channel isolation, cancellation, invalid arguments, and shutdown with active subscriptions; the user also confirmed manual delivery. Automated checks ran in a temporary harness; no persistent automated suite was added.
 - **Theory:** [My notes — Subscriptions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.eyqdtl292mjb).
+
+## Stage 12 — SDL endpoint foundation
+
+- **SDL:** [post.schema.ts](./src/modules/post/post.schema.ts) describes the API using schema text instead of constructing each `GraphQLObjectType` manually.
+- **`buildSchema`:** builds a `GraphQLSchema` from SDL; it supplies schema structure and default resolution, not application-specific CRUD logic.
+- **Root value:** [post.rootValue.ts](./src/modules/post/post.rootValue.ts) is intentionally empty; later root functions will receive `(args, context, info)` through default resolution.
+- **Inputs:** `CreatePostRequest`, `UpdatedPostContent`, and `Pagination` define structured arguments; they are distinct from output object types and TypeScript types.
+- **Interface:** `Post implements Timestamped` must explicitly declare the interface's timestamp fields; an interface does not copy fields or create their values.
+- **Routing/tooling:** [routes/index.ts](./src/routes/index.ts) mounts `/post-gql`; [.graphqlrc.yml](./.graphqlrc.yml) associates editor documents with two independent endpoint schemas.
+- **Scope:** introspection and `{ __typename }` work; post queries/mutations are contracts awaiting their service/root wiring.
+- **Verification:** the isolated foundation passed type-check/build and HTTP checks for post introspection, the intentionally unresolved lookup, and the existing `/graphql` version field.
+- **Theory:** [My notes — Introduction/schema contract](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0) and [SDL file conventions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.rxvtl1jo0tus); this stage keeps SDL embedded in TypeScript.
