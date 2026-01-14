@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: SDL-based post endpoint foundation.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
+**Current stage: SDL-based post CRUD.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -82,7 +82,7 @@ For manual message-stream testing, use the saved `sendMessage` mutation and foll
 
 ### SDL endpoint
 
-`POST http://localhost:3000/post-gql` exposes a separate schema constructed with `buildSchema` from SDL. Its root value is intentionally empty in this stage: schema inspection works, but post CRUD resolvers are not wired yet.
+`POST http://localhost:3000/post-gql` exposes a separate schema constructed with `buildSchema` from SDL. Its root functions delegate to the post service for lookup, author filtering, pagination, creation, updates, and soft deletion. `createPost` requires a `post` input containing `title` and `content`; `authorId` is a separate argument. Data resets on restart. Ownership checks compare caller-supplied IDs; authentication is a later exercise.
 
 ```json
 { "query": "{ __typename }" }
@@ -118,7 +118,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   ├── config.ts                # Load and validate environment settings
 │   ├── shutdownHandler.ts       # Close HTTP/WebSocket resources on termination
 │   ├── routes/
-│   │   ├── index.ts             # Mount /health and /graphql
+│   │   ├── index.ts             # Mount /health, /graphql, and /post-gql
 │   │   └── health.ts            # Health response handler
 │   ├── graphql/
 │   │   ├── schema.ts            # Compose Query/Mutation roots and feature fields
@@ -131,7 +131,11 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   ├── modules/post/
 │   │   ├── index.ts             # Export the post schema and root value
 │   │   ├── post.schema.ts       # Embedded SDL: Post, inputs, interface, operation roots
-│   │   └── post.rootValue.ts    # Empty root object; CRUD wiring comes next
+│   │   ├── post.rootValue.ts    # Map SDL root fields to resolver functions
+│   │   ├── post.resolver.ts     # Delegate GraphQL arguments to services
+│   │   ├── post.service.ts      # CRUD, ownership checks, pagination, soft deletion
+│   │   ├── post.data.ts         # Seeded in-memory post records
+│   │   └── post.type.ts         # Internal post and input TypeScript types
 │   ├── modules/message/
 │   │   ├── message.schema.ts    # Message type, creation mutation, subscription field
 │   │   ├── message.resolver.ts  # Delegate message creation to the service

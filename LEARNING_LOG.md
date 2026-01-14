@@ -129,3 +129,12 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Scope:** introspection and `{ __typename }` work; post queries/mutations are contracts awaiting their service/root wiring.
 - **Verification:** the isolated foundation passed type-check/build and HTTP checks for post introspection, the intentionally unresolved lookup, and the existing `/graphql` version field.
 - **Theory:** [My notes — Introduction/schema contract](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0) and [SDL file conventions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.rxvtl1jo0tus); this stage keeps SDL embedded in TypeScript.
+
+## Stage 13 — Post CRUD through SDL root functions
+
+- **Root resolution:** [post.rootValue.ts](./src/modules/post/post.rootValue.ts) maps SDL fields to thin [resolvers](./src/modules/post/post.resolver.ts), whose first argument is the GraphQL argument object.
+- **Service/data:** [post.service.ts](./src/modules/post/post.service.ts) handles CRUD, ownership comparisons, and pagination over [seeded records](./src/modules/post/post.data.ts); `from` is a raw array index, skipping deleted records while collecting results.
+- **Input contract:** [post.schema.ts](./src/modules/post/post.schema.ts) requires `CreatePostRequest!`; [TypeScript types](./src/modules/post/post.type.ts) keep the separate `authorId` argument outside that input.
+- **Soft deletion:** internal `isDeleted` hides records from lookups/lists without exposing the flag in the GraphQL `Post` type. Caller-supplied author IDs are not authentication.
+- **Verification:** isolated compilation plus temporary service and GraphQL execution checks passed CRUD, missing/null input rejection, pagination errors, ownership failures, and soft deletion. No persistent test suite was added; saved Requestly examples and manual testing follow next.
+- **Theory:** [My notes — schema and inputs](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0), [buildSchema/default resolution](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts), and [mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).

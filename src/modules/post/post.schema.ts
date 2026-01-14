@@ -43,7 +43,7 @@ const schema = buildSchema(/* GraphQL */ `
   type Mutation {
     # this should come from context, we would do that in later exercise
     # when learning about context
-    createPost(authorId: ID!, post: CreatePostRequest): Post!
+    createPost(authorId: ID!, post: CreatePostRequest!): Post!
     updatePost(
       id: ID!
       authorId: ID!
