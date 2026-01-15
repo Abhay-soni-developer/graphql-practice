@@ -1,0 +1,5 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "mutation CreatePost($authorId: ID!, $title: String!, $content: String!) {\n  createPost(authorId: $authorId, post: {\n    title: $title\n    content: $content\n  }) {\n    id\n    authorId\n    title\n    createdAt\n  }\n}",
+  "variables": "{\n    \"authorId\": \"101\",\n    \"title\": \"Learning Embedded SDL\",\n    \"content\": \"Testing GraphQL SDL and resolvers\"\n}"
+}

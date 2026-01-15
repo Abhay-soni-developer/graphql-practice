@@ -1,0 +1,5 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "mutation UpdatePost($id: ID!, $authorId: ID!, $updatedPostContent: UpdatedPostContent!) {\n  updatePost(\n    id: $id\n    authorId: $authorId\n    updatedPostContent: $updatedPostContent\n  ) {\n    id\n    title\n    content\n    updatedAt\n  }\n}",
+  "variables": "{\n  \"id\": \"1\",\n  \"authorId\": \"1\",\n  \"updatedPostContent\": {\n      \"title\": \"GraphQL SDL - Updated\",\n      \"content\": \"Updated through a GraphQL mutation\"\n    }\n}"
+}

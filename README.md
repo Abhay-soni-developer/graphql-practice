@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: SDL-based post CRUD.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
+**Current stage: SDL post CRUD and saved request examples.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -87,6 +87,8 @@ For manual message-stream testing, use the saved `sendMessage` mutation and foll
 ```json
 { "query": "{ __typename }" }
 ```
+
+Use the saved `createNewPost-Flatly_at_the_Top` and `createNewPost-using_Input_Defined_At_Backend` requests to compare separate variables with an input-object variable. Run creation before `getPostByIdOrAuthor` to see author `101` results. `updatePost` and `Delete Post` target seed post `1`; run update before deletion, or restart to restore seed data.
 
 Expected: `{ "data": { "__typename": "Query" } }`. The existing `/graphql` API remains available. `.graphqlrc.yml` points editor tooling to the two schemas independently; it does not configure server routes.
 

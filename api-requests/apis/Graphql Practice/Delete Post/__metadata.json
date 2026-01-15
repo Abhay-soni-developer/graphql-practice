@@ -1,0 +1,12 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/metadata.json",
+  "type": "api",
+  "entryType": "graphql",
+  "id": "bb95fd24-87cc-461a-b83c-ab6757c98299",
+  "rank": "ZzUV",
+  "url": "http://localhost:3000/post-gql",
+  "method": "POST",
+  "schemaSource": {
+    "kind": "introspection"
+  }
+}

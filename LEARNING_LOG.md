@@ -138,3 +138,11 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Soft deletion:** internal `isDeleted` hides records from lookups/lists without exposing the flag in the GraphQL `Post` type. Caller-supplied author IDs are not authentication.
 - **Verification:** isolated compilation plus temporary service and GraphQL execution checks passed CRUD, missing/null input rejection, pagination errors, ownership failures, and soft deletion. No persistent test suite was added; saved Requestly examples and manual testing follow next.
 - **Theory:** [My notes — schema and inputs](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0), [buildSchema/default resolution](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts), and [mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).
+
+## Stage 14 — Testing SDL post operations
+
+- **Flat variables:** [creation request](<./api-requests/apis/Graphql Practice/createNewPost-Flatly_at_the_Top/__query.json>) builds the `post` input from separate `$title` and `$content` variables.
+- **Input variable:** [creation with input](<./api-requests/apis/Graphql Practice/createNewPost-using_Input_Defined_At_Backend/__query.json>) passes one `$post: CreatePostRequest!` object matching the schema contract.
+- **Selections and mutations:** [lookups](<./api-requests/apis/Graphql Practice/getPostByIdOrAuthor/__query.json>) select two root fields; [update](<./api-requests/apis/Graphql Practice/updatePost/__query.json>) uses structured input, while [delete](<./api-requests/apis/Graphql Practice/Delete Post/__query.json>) returns a scalar Boolean.
+- **Verification:** all five saved queries validated and executed successfully against the compiled schema/root functions in a disposable process; endpoint metadata points to `/post-gql`, and type-checking passed. These checks did not send HTTP requests through Requestly.
+- **Theory:** [My notes — Variables](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.sl5vmcf3ax20) and [Mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).

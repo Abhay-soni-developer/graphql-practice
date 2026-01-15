@@ -1,0 +1,4 @@
+{
+  "$schema": "https://assets.requestly.com/local/v1.20.0/graphql-query.json",
+  "query": "query TestPosts {\n  post(postId: \"1\") {\n    id\n    title\n    authorId\n  }\n  postByAuthor(authorId: \"2\") {\n    id\n    title\n    authorId\n  }\n}"
+}
