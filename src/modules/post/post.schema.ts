@@ -1,4 +1,5 @@
-import { buildSchema } from "graphql";
+import { buildSchema, isField, isObjectType } from "graphql";
+import { resolvePostSummary } from "./post.resolver.js";
 
 // /* GraphQL */  this comment is important to indicate for editor and extension
 // that below string is graphql
@@ -14,6 +15,7 @@ const schema = buildSchema(/* GraphQL */ `
     title: String!
     content: String!
     authorId: ID!
+    summary: String!
     createdAt: String!
     updatedAt: String!
   }
@@ -52,6 +54,16 @@ const schema = buildSchema(/* GraphQL */ `
     deletePost(id: ID!, authorId: ID!): Boolean!
   }
 `);
+
+const Post = schema.getType("Post");
+// attaching resolver to computed field
+if (isObjectType(Post)) {
+  const postFields = Post.getFields();
+  const summaryField = postFields["summary"];
+  if (isField(summaryField)) {
+    summaryField.resolve = resolvePostSummary;
+  }
+}
 
 const postSchema = schema;
 export default postSchema;

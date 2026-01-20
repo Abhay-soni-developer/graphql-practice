@@ -1,6 +1,7 @@
 import {
   createAndSavePost,
   deletePost,
+  generatePostSummary,
   getPostById,
   postByAuthor,
   posts,
@@ -59,4 +60,8 @@ export async function resolveDeletePost(args: {
   authorId: string;
 }): Promise<boolean> {
   return await deletePost(args.id, args.authorId);
+}
+
+export function resolvePostSummary(post: Post): string {
+  return generatePostSummary(post);
 }

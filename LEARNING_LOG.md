@@ -146,3 +146,10 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Selections and mutations:** [lookups](<./api-requests/apis/Graphql Practice/getPostByIdOrAuthor/__query.json>) select two root fields; [update](<./api-requests/apis/Graphql Practice/updatePost/__query.json>) uses structured input, while [delete](<./api-requests/apis/Graphql Practice/Delete Post/__query.json>) returns a scalar Boolean.
 - **Verification:** all five saved queries validated and executed successfully against the compiled schema/root functions in a disposable process; endpoint metadata points to `/post-gql`, and type-checking passed. These checks did not send HTTP requests through Requestly.
 - **Theory:** [My notes — Variables](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.sl5vmcf3ax20) and [Mutations](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.n615e93gaxx7).
+
+## Stage 15 — Computed field on an SDL object
+
+- **Schema wiring:** [post.schema.ts](./src/modules/post/post.schema.ts) declares `summary: String!`, then attaches its field resolver to the built schema using type/field guards.
+- **Parent value:** [resolvePostSummary](./src/modules/post/post.resolver.ts) receives the current post and delegates to `generatePostSummary`; the computed value does not need storage or another fetch.
+- **Verification:** type-checking and direct GraphQL checks passed summary selection on one post, a list, and a missing post. No persistent test suite was added.
+- **Theory:** [My notes — Root/nested resolvers](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.f2sw8qc1hp1z) and [buildSchema](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts).

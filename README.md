@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: SDL post CRUD and saved request examples.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
+**Current stage: SDL post CRUD with a computed summary field.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -82,7 +82,7 @@ For manual message-stream testing, use the saved `sendMessage` mutation and foll
 
 ### SDL endpoint
 
-`POST http://localhost:3000/post-gql` exposes a separate schema constructed with `buildSchema` from SDL. Its root functions delegate to the post service for lookup, author filtering, pagination, creation, updates, and soft deletion. `createPost` requires a `post` input containing `title` and `content`; `authorId` is a separate argument. Data resets on restart. Ownership checks compare caller-supplied IDs; authentication is a later exercise.
+`POST http://localhost:3000/post-gql` exposes a separate schema constructed with `buildSchema` from SDL. Select `summary` on a post to compute a description from its existing fields through an explicitly attached field resolver. Its root functions delegate to the post service for lookup, author filtering, pagination, creation, updates, and soft deletion. `createPost` requires a `post` input containing `title` and `content`; `authorId` is a separate argument. Data resets on restart. Ownership checks compare caller-supplied IDs; authentication is a later exercise.
 
 ```json
 { "query": "{ __typename }" }
