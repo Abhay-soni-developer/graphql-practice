@@ -1,5 +1,5 @@
 import type { GraphQLResolveInfo } from "graphql";
-import type { HelloQueryParam } from "../utils/types/types.js";
+import type { HelloQueryParam } from "../utils/index.js";
 
 const rootValue = {
   // either called when default resolver is not present
