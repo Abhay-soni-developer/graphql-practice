@@ -1,0 +1,23 @@
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  description: String!
+  tags: [String!]!
+}
+
+input CreateProductData {
+  name: String!
+  price: Int!
+  description: String!
+  tags: [String!]!
+}
+
+extend type Query {
+  getProduct(id: ID!): Product
+  searchProducts(searchTerm: String!): [Product!]!
+}
+
+extend type Mutation {
+  registerNewProduct(newProduct: CreateProductData!): Product!
+}

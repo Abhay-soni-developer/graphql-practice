@@ -153,3 +153,12 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Parent value:** [resolvePostSummary](./src/modules/post/post.resolver.ts) receives the current post and delegates to `generatePostSummary`; the computed value does not need storage or another fetch.
 - **Verification:** type-checking and direct GraphQL checks passed summary selection on one post, a list, and a missing post. No persistent test suite was added.
 - **Theory:** [My notes — Root/nested resolvers](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.f2sw8qc1hp1z) and [buildSchema](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.d81409p2lts).
+
+## Stage 16 — External SDL files and modular schema composition
+
+- **External SDL:** [post.schema.graphql](./src/modules/post/post.schema.graphql) holds the post contract; [post.schema.ts](./src/modules/post/post.schema.ts) reads it relative to `import.meta.url`, builds the schema, and attaches the summary resolver. The embedded example remains commented for revision.
+- **Composition:** [aggregating-modular-schema.ts](./src/graphql/aggregating-modular-schema.ts) joins [base SDL](./src/graphql/base.schema.graphql), [employee SDL](./src/modules/employee/employee.schema.graphql), and [product SDL](./src/modules/product/product.schema.graphql). `extend type` adds fields to existing Query/Mutation roots.
+- **Example:** `/modular-gql` executes the [saved employee mutation](./api-requests/apis/modular-schema/__query.json) with a string contact; its mock root returns ID `12` without persistence. Other modular operations are declarations awaiting resolvers.
+- **Build assets:** [copy-graphql.js](./scripts/copy-graphql.js) copies SDL into matching `dist` paths after `tsc`. `.js` uses ESM through package `type: module`; `fileURLToPath` safely converts script-relative URLs.
+- **Verification:** the build passed; compiled schemas loaded, the saved employee mutation and post summary query executed, and numeric contact input was rejected. Checks used direct GraphQL execution, not Requestly HTTP; no persistent test suite was added.
+- **Theory:** [My notes — SDL files](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.rxvtl1jo0tus) and [schema contracts](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0).

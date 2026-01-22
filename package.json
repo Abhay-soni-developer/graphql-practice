@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
-    "build": "tsc",
+    "move-graphql-files": "node ./scripts/copy-graphql.js",
+    "build": "tsc && npm run move-graphql-files",
     "start": "node dist/index.js"
   },
   "repository": {

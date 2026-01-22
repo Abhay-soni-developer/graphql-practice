@@ -4,7 +4,7 @@
 
 Learn GraphQL incrementally through small working examples, saved Requestly requests, and concise [revision notes](./LEARNING_LOG.md). Cover schema construction, resolvers, arguments, variables, object types, lists, nullability, aliases, fragments, and mutations.
 
-**Current stage: SDL post CRUD with a computed summary field.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
+**Current stage: external SDL files and modular schema composition.** The API exposes health, greetings, version, user lookup/listing, and `createUser(name:, email:)`. Saved examples cover variables, aliases, fragments, and mutations. Data is stored in memory and resets when the server restarts. HTTP and WebSocket operations share `/graphql`; shutdown signals close the server and WebSocket connections. `sendMessage(text:, from:, to:)` publishes to the recipient channel; `subscribeChannel(consumerId:)` streams future events to its active subscribers.
 
 This is a guided rebuild of earlier practice code. Reconstructed Git author dates organize the learning sequence; they do not represent original implementation dates. Committer dates record the rebuild commits' actual creation.
 
@@ -33,7 +33,7 @@ npm run dev
 | --- | --- |
 | `npm run dev` | Run TypeScript with automatic restarts |
 | `npx tsc --noEmit` | Check types without generating files |
-| `npm run build` | Compile source into `dist/` |
+| `npm run build` | Compile source and copy SDL files into `dist/` |
 | `npm start` | Run the compiled app; build first |
 
 Configuration loads `.env.<NODE_ENV>`, defaulting to development. Existing process environment values take precedence. No database is required.
@@ -92,6 +92,8 @@ Use the saved `createNewPost-Flatly_at_the_Top` and `createNewPost-using_Input_D
 
 Expected: `{ "data": { "__typename": "Query" } }`. The existing `/graphql` API remains available. `.graphqlrc.yml` points editor tooling to the two schemas independently; it does not configure server routes.
 
+`POST http://localhost:3000/modular-gql` demonstrates combining base, employee, and product SDL using `extend type`. The saved `modular-schema` Requestly mutation returns a mock employee with ID `12`; it does not persist records. Other fields on this teaching endpoint are schema placeholders awaiting resolvers.
+
 ## Libraries
 
 | Library | Purpose |
@@ -123,6 +125,9 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   │   ├── index.ts             # Mount /health, /graphql, and /post-gql
 │   │   └── health.ts            # Health response handler
 │   ├── graphql/
+│   │   ├── aggregating-modular-schema.ts # Combine feature SDL and mock employee root
+│   │   ├── base.schema.graphql   # Shared Query/Mutation root definitions
+│   │   ├── index.ts              # Export schema, root value, and its type
 │   │   ├── schema.ts            # Compose Query/Mutation roots and feature fields
 │   │   └── root-value.ts        # Root values and alternate hello example
 │   ├── modules/user/
@@ -132,12 +137,15 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   │   └── user.type.ts         # User, records, and mutation argument types
 │   ├── modules/post/
 │   │   ├── index.ts             # Export the post schema and root value
-│   │   ├── post.schema.ts       # Embedded SDL: Post, inputs, interface, operation roots
+│   │   ├── post.schema.graphql  # Post contract, inputs, and Timestamped interface
+│   │   ├── post.schema.ts       # Load SDL and attach the computed summary resolver
 │   │   ├── post.rootValue.ts    # Map SDL root fields to resolver functions
 │   │   ├── post.resolver.ts     # Delegate GraphQL arguments to services
 │   │   ├── post.service.ts      # CRUD, ownership checks, pagination, soft deletion
 │   │   ├── post.data.ts         # Seeded in-memory post records
 │   │   └── post.type.ts         # Internal post and input TypeScript types
+│   ├── modules/employee/        # Employee SDL extensions and TypeScript type
+│   ├── modules/product/         # Product SDL extensions and TypeScript type
 │   ├── modules/message/
 │   │   ├── message.schema.ts    # Message type, creation mutation, subscription field
 │   │   ├── message.resolver.ts  # Delegate message creation to the service
@@ -156,6 +164,7 @@ The active stage uses the following files. Other untracked exercises in a local 
 │   ├── PROJECT.md              # Requestly project context
 │   ├── .gitignore              # Requestly-specific exclusions
 │   └── README.md               # API-client setup and usage guide
+├── scripts/copy-graphql.js      # Copy runtime SDL assets after compilation
 ├── package.json                # Dependencies and scripts
 ├── package-lock.json           # Exact dependency resolutions
 ├── .graphqlrc.yml              # Editor schema/project configuration

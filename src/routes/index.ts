@@ -4,6 +4,10 @@ import { createHandler } from "graphql-http/lib/use/express";
 import schema from "../graphql/schema.js";
 import rootValue from "../graphql/root-value.js";
 import { postRootValue, postSchema } from "../modules/post/index.js";
+import {
+  modularSchema,
+  modularRootValue,
+} from "../graphql/aggregating-modular-schema.js";
 
 function createRoutes(): Router {
   const routes = Router();
@@ -12,6 +16,10 @@ function createRoutes(): Router {
   routes.all(
     "/post-gql",
     createHandler({ schema: postSchema, rootValue: postRootValue }),
+  );
+  routes.all(
+    "/modular-gql",
+    createHandler({ schema: modularSchema, rootValue: modularRootValue }),
   );
   return routes;
 }
