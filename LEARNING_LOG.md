@@ -162,3 +162,10 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - **Build assets:** [copy-graphql.js](./scripts/copy-graphql.js) copies SDL into matching `dist` paths after `tsc`. `.js` uses ESM through package `type: module`; `fileURLToPath` safely converts script-relative URLs.
 - **Verification:** the build passed; compiled schemas loaded, the saved employee mutation and post summary query executed, and numeric contact input was rejected. Checks used direct GraphQL execution, not Requestly HTTP; no persistent test suite was added.
 - **Theory:** [My notes — SDL files](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.rxvtl1jo0tus) and [schema contracts](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.0).
+
+## Stage 17 — Resolver execution, concurrency, and error propagation
+
+- Reviewed parent–child dependencies, synchronous versus asynchronous field execution, and concurrent sibling fields.
+- Learned that only top-level mutation fields execute serially; nullability determines how failures propagate and whether later mutations can run.
+- Covered detached async work and why mutation ordering provides no automatic rollback; distributed workflows need application-level coordination.
+- **References:** [Execution order notes](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.t9x7gxiridvw) · [Six scenario-based questions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.br6j177y9b64)
