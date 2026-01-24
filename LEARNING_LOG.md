@@ -169,3 +169,11 @@ Each upcoming stage will receive its own short entry when verified. These are re
 - Learned that only top-level mutation fields execute serially; nullability determines how failures propagate and whether later mutations can run.
 - Covered detached async work and why mutation ordering provides no automatic rollback; distributed workflows need application-level coordination.
 - **References:** [Execution order notes](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.t9x7gxiridvw) · [Six scenario-based questions](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.br6j177y9b64)
+
+## Stage 18 — Phase 2.1: Field Collection & Resolver Lifecycle
+
+- **Response keys:** repeated fields merge; aliases create separate field groups.
+- **Fragments:** selection merging, runtime type conditions, and `__typename`.
+- **Resolver inspection:** grouped selections through `info.fieldNodes`.
+- **Conditional inclusion:** `@include` and `@skip` control field collection and resolver execution.
+- **Reference:** [Phase 2.1 notes](https://docs.google.com/document/d/1NNcCuvllHYrxcwX9Y2obH-7_5nDUmfjjpWODbA6RLnQ/edit?tab=t.w6x4rtafgqb9).
